@@ -1,4 +1,4 @@
-package org.apache.cordova.plugin;
+package cordova-plugin-twilio-video;
 
 import org.apache.cordova.BuildHelper;
 import org.apache.cordova.CallbackContext;
@@ -16,10 +16,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import org.apache.cordova.plugin.TwilioVideoActivity;
 
-
-public class TwilioVideo extends CordovaPlugin {
+public class VideoConversationPlugin extends CordovaPlugin {
 
 
     public CallbackContext callbackContext;
@@ -37,7 +35,7 @@ public class TwilioVideo extends CordovaPlugin {
     
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		this.callbackContext = callbackContext;
-		if (action.equals("openRoom")) {
+		if (action.equals("open")) {
 		   	this.openRoom(args);
 		}
         return true;
@@ -45,8 +43,8 @@ public class TwilioVideo extends CordovaPlugin {
 
 	public void openRoom(final JSONArray args) {
         try {
-    	 	this.token = args.getString(0);
-            this.roomId = args.getString(1);
+            this.roomId = args.getString(0);
+            this.token = args.getString(1);
             final CordovaPlugin that = this;
             final String token = this.token;
             final String roomId = this.roomId;
@@ -56,11 +54,11 @@ public class TwilioVideo extends CordovaPlugin {
      		cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
 
-                    Intent intentTwilioVideo = new Intent(that.cordova.getActivity().getBaseContext(), TwilioVideoActivity.class);
+                    Intent intentTwilioVideo = new Intent(that.cordova.getActivity().getBaseContext(), ConversationActivity.class);
         			intentTwilioVideo.putExtra("token", token);
                     intentTwilioVideo.putExtra("roomId", roomId);
                     // avoid calling other phonegap apps
-                    intentTwilioVideo.setPackage(that.cordova.getActivity().getApplicationContext().getPackageName());
+                    //intentTwilioVideo.setPackage(that.cordova.getActivity().getApplicationContext().getPackageName());
                     //that.cordova.startActivityForResult(that, intentTwilioVideo);
                     //that.cordova.getActivity().startActivity(intentTwilioVideo);
                     that.cordova.startActivityForResult(that, intentTwilioVideo, 0);
@@ -78,14 +76,11 @@ public class TwilioVideo extends CordovaPlugin {
         state.putString("token", this.token);
         state.putString("roomId", this.roomId);
         return state;
-    }
+    }   
 
     public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
         this.token = state.getString("token");
         this.roomId = state.getString("roomId");
         this.callbackContext = callbackContext;
     }
-
-
-
 }

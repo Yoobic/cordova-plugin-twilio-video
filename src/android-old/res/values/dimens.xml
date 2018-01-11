@@ -5,5 +5,4 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="local_video_size">90dp</dimen>
     <dimen name="local_video_margin">16dp</dimen>
-    <dimen name="status_margin">8dp</dimen>
 </resources>

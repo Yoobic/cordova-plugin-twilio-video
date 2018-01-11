@@ -15,7 +15,7 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         UIStoryboard *sb = [UIStoryboard storyboardWithName:@"TwilioVideo" bundle:nil];
-        TwilioVideoViewController *vc = [sb instantiateViewControllerWithIdentifier:@"TwilioVideoViewController"];
+        TwilioVideoViewController *vc =  [sb instantiateViewControllerWithIdentifier:@"TwilioVideoViewController"];
         
         vc.accessToken = token;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
