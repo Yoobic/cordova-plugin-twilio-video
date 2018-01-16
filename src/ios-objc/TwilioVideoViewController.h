@@ -6,10 +6,8 @@
 
 @import UIKit;
 
-@interface TwilioVideoViewController : UIViewController
+@interface XXTwilioVideoViewController : UIViewController
 
-@property (nonatomic, strong) NSString *accessToken;
-
-- (void)connectToRoom:(NSString*)room ;
+- (void)connectToRoom:(NSString*)room withToken:(NSString*)accessToken;
 
 @end

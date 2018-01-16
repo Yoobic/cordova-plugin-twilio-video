@@ -17,7 +17,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 
-public class VideoConversationPlugin extends CordovaPlugin {
+public class TwilioVideoPlugin extends CordovaPlugin {
 
 
     public CallbackContext callbackContext;
@@ -54,7 +54,7 @@ public class VideoConversationPlugin extends CordovaPlugin {
      		cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
 
-                    Intent intentTwilioVideo = new Intent(that.cordova.getActivity().getBaseContext(), ConversationActivity.class);
+                    Intent intentTwilioVideo = new Intent(that.cordova.getActivity().getBaseContext(), TwilioVideoActivity.class);
         			intentTwilioVideo.putExtra("token", token);
                     intentTwilioVideo.putExtra("roomId", roomId);
                     // avoid calling other phonegap apps

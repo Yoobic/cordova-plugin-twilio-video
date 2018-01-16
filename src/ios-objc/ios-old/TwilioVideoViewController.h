@@ -8,6 +8,8 @@
 
 @interface TwilioVideoViewController : UIViewController
 
-- (void)connectToRoom:(NSString*)room withToken:(NSString*)accessToken;
+@property (nonatomic, strong) NSString *accessToken;
+
+- (void)connectToRoom:(NSString*)room ;
 
 @end

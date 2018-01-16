@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="J0k-35-tDc">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Twilio Video View Controller-->
+        <scene sceneID="nZR-qd-fY9">
+            <objects>
+                <viewController storyboardIdentifier="TwilioVideoViewController" id="jSN-F6-Q4K" customClass="TwilioVideoViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="8oD-ke-cGW"/>
+                        <viewControllerLayoutGuide type="bottom" id="tZu-uw-hgi"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3Bh-pO-6uY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="YOOBIC Connect" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ebq-ja-6iU">
+                                <rect key="frame" x="0.0" y="64" width="375" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="hJ3-NM-pz1" customClass="TVIVideoView">
+                                <rect key="frame" x="219" y="425" width="120" height="160"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="160" id="Ryo-uk-a8b"/>
+                                    <constraint firstAttribute="width" constant="120" id="ku1-xq-7XF"/>
+                                </constraints>
+                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" distribution="equalCentering" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="yEQ-Jd-Lda">
+                                <rect key="frame" x="48" y="602" width="279" height="33"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="deh-AI-0mD" userLabel="Video Button">
+                                        <rect key="frame" x="0.0" y="0.0" width="33" height="33"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="no-video-ios-white-33px.png"/>
+                                        <connections>
+                                            <action selector="toggleVideoWithSender:" destination="jSN-F6-Q4K" eventType="touchUpInside" id="WeT-d9-6OE"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rwp-9E-VzS" userLabel="Mic Button">
+                                        <rect key="frame" x="82" y="0.0" width="33" height="33"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="no-mic-ios-white-33px.png">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="toggleMicWithSender:" destination="jSN-F6-Q4K" eventType="touchUpInside" id="oOq-Dv-oOH"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XFY-jj-EdK" userLabel="Flip Camera Button">
+                                        <rect key="frame" x="164" y="0.0" width="33" height="33"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="switch-camera-ios-white-33px.png"/>
+                                        <connections>
+                                            <action selector="flipCameraWithSender:" destination="jSN-F6-Q4K" eventType="touchUpInside" id="bzU-8U-m0o"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="krA-sT-Z3g" userLabel="Disconnect Button">
+                                        <rect key="frame" x="246" y="0.0" width="33" height="33"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="end-call-ios-white-33px.png">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="disconnectWithSender:" destination="jSN-F6-Q4K" eventType="touchUpInside" id="PjE-WV-6Eg"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <rect key="contentStretch" x="0.0" y="0.0" width="0.80000000000000004" height="1"/>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⦿REC" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" highlighted="YES" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dSC-bQ-vuA">
+                                <rect key="frame" x="48" y="96" width="50" height="19.5"/>
+                                <color key="tintColor" cocoaTouchSystemColor="lightTextColor"/>
+                                <accessibility key="accessibilityConfiguration" hint="Recording" label="Recording">
+                                    <bool key="isElement" value="YES"/>
+                                </accessibility>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="Pnm-yh-7Oi"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="16"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="yEQ-Jd-Lda" firstAttribute="centerX" secondItem="3Bh-pO-6uY" secondAttribute="centerX" id="PM3-Ga-tlI"/>
+                            <constraint firstAttribute="trailing" secondItem="hJ3-NM-pz1" secondAttribute="trailing" constant="36" id="XIF-O8-Ueh"/>
+                            <constraint firstItem="dSC-bQ-vuA" firstAttribute="top" secondItem="8oD-ke-cGW" secondAttribute="bottom" constant="32" id="ZGt-MP-uwt"/>
+                            <constraint firstItem="tZu-uw-hgi" firstAttribute="top" secondItem="hJ3-NM-pz1" secondAttribute="bottom" constant="82" id="ih6-QP-3US"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="yEQ-Jd-Lda" secondAttribute="trailing" constant="32" id="oI7-Oo-Hwy"/>
+                            <constraint firstItem="ebq-ja-6iU" firstAttribute="top" secondItem="8oD-ke-cGW" secondAttribute="bottom" id="sqw-S7-DJO"/>
+                            <constraint firstItem="yEQ-Jd-Lda" firstAttribute="leading" secondItem="3Bh-pO-6uY" secondAttribute="leadingMargin" constant="32" id="toV-9r-dRI"/>
+                            <constraint firstItem="dSC-bQ-vuA" firstAttribute="leading" secondItem="3Bh-pO-6uY" secondAttribute="leadingMargin" constant="32" id="y7b-i9-bmh"/>
+                            <constraint firstItem="tZu-uw-hgi" firstAttribute="top" secondItem="yEQ-Jd-Lda" secondAttribute="bottom" constant="32" id="zmP-4Q-u9k"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="9M3-8C-vjE">
+                        <barButtonItem key="rightBarButtonItem" title="Settings" id="YhB-yl-EZP">
+                            <connections>
+                                <action selector="connectOptionsButtonTapped:" destination="jSN-F6-Q4K" id="lg2-Gv-fdW"/>
+                                <segue destination="uXW-85-THo" kind="show" id="shb-ZG-bqm"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="disconnectButton" destination="krA-sT-Z3g" id="bY5-b1-Kgm"/>
+                        <outlet property="flipCameraButton" destination="XFY-jj-EdK" id="4z3-Ad-GTA"/>
+                        <outlet property="messageLabel" destination="ebq-ja-6iU" id="yjH-dj-KgF"/>
+                        <outlet property="micButton" destination="rwp-9E-VzS" id="SW4-po-OHw"/>
+                        <outlet property="previewView" destination="hJ3-NM-pz1" id="y1o-u0-FtS"/>
+                        <outlet property="recordingLabel" destination="dSC-bQ-vuA" id="OcV-7m-6JT"/>
+                        <outlet property="videoButton" destination="deh-AI-0mD" id="AHC-LZ-2fO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JfB-JL-3y4" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="661.60000000000002" y="367.46626686656674"/>
+        </scene>
+        <!--Settings Table View Controller-->
+        <scene sceneID="oJs-oy-MpX">
+            <objects>
+                <tableViewController id="uXW-85-THo" customClass="SettingsTableViewController" customModule="Operations" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="8km-Y6-TLM">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SETTINGS-REUSE-IDENTIFIER" textLabel="UHh-dX-3Sp" detailTextLabel="Hra-m9-rei" style="IBUITableViewCellStyleValue1" id="6kL-YS-1eu">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6kL-YS-1eu" id="6rJ-6u-TVh">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UHh-dX-3Sp">
+                                            <rect key="frame" x="16" y="12" width="33.5" height="20.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Hra-m9-rei">
+                                            <rect key="frame" x="315" y="12" width="44" height="20.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="uXW-85-THo" id="AZc-0J-3iV"/>
+                            <outlet property="delegate" destination="uXW-85-THo" id="PUi-59-is6"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YZZ-Ph-f6a" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1466" y="366"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="nPH-9k-pds">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="J0k-35-tDc" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="93b-p9-ggL">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="jSN-F6-Q4K" kind="relationship" relationship="rootViewController" id="lCj-Hd-nZO"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xng-qO-J3h" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-116" y="367"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="end-call-ios-white-33px.png" width="33" height="33"/>
+        <image name="no-mic-ios-white-33px.png" width="33" height="33"/>
+        <image name="no-video-ios-white-33px.png" width="33" height="33"/>
+        <image name="switch-camera-ios-white-33px.png" width="33" height="33"/>
+    </resources>
+    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+</document>

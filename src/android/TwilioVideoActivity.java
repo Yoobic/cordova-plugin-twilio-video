@@ -1,6 +1,5 @@
 package cordova-plugin-twilio-video;
 
-
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -42,7 +41,7 @@ import com.twilio.video.VideoView;
 
 import java.util.Collections;
 
-public class ConversationActivity extends AppCompatActivity {
+public class TwilioVideoActivity extends AppCompatActivity {
     private static final int CAMERA_MIC_PERMISSION_REQUEST_CODE = 1;
     private static final String TAG = "VideoActivity";
 
@@ -455,7 +454,7 @@ public class ConversationActivity extends AppCompatActivity {
             public void onDisconnected(Room room, TwilioException e) {
                 localParticipant = null;
                 videoStatusTextView.setText("Disconnected from " + room.getName());
-                ConversationActivity.this.room = null;
+                TwilioVideoActivity.this.room = null;
                 // Only reinitialize the UI if disconnect was not called from onDestroy()
                 if (!disconnectedFromOnDestroy) {
                     configureAudio(false);
@@ -627,7 +626,7 @@ public class ConversationActivity extends AppCompatActivity {
                         switchCameraActionFab.hide();
                     }
                     localVideoActionFab.setImageDrawable(
-                            ContextCompat.getDrawable(ConversationActivity.this, icon));
+                            ContextCompat.getDrawable(TwilioVideoActivity.this, icon));
                 }
             }
         };
@@ -648,7 +647,7 @@ public class ConversationActivity extends AppCompatActivity {
                     int icon = enable ?
                             R.drawable.ic_mic_green_24px : R.drawable.ic_mic_off_red_24px;
                     muteActionFab.setImageDrawable(ContextCompat.getDrawable(
-                            ConversationActivity.this, icon));
+                            TwilioVideoActivity.this, icon));
                 }
             }
         };
@@ -679,9 +678,9 @@ public class ConversationActivity extends AppCompatActivity {
     //                 @Override
     //                 public void onCompleted(Exception e, JsonObject result) {
     //                     if (e == null) {
-    //                         ConversationActivity.this.accessToken = result.get("token").getAsString();
+    //                         TwilioVideoActivity.this.accessToken = result.get("token").getAsString();
     //                     } else {
-    //                         Toast.makeText(ConversationActivity.this,
+    //                         Toast.makeText(TwilioVideoActivity.this,
     //                                 R.string.error_retrieving_access_token, Toast.LENGTH_LONG)
     //                                 .show();
     //                     }

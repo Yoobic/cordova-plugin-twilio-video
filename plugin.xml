@@ -18,10 +18,13 @@
                 <param name="ios-package" value="TwilioVideoPlugin" />
             </feature>
         </config-file>
-        <source-file src="src/ios/TwilioVideoPlugin.m" />
-        <source-file src="src/ios/TwilioVideoViewController.m" />
-        <header-file src="src/ios/TwilioVideoViewController.h" />
-        <resource-file src="src/ios/Resources/TwilioVideo.storyboard" target="Resources/TwilioVideo.storyboard" />
+        <header-file src="src/ios/TwilioVideoBridgingHeader.h" />
+        <source-file src="src/ios/Utils.swift"/>
+        <source-file src="src/ios/Settings.swift"/>
+        <source-file src="src/ios/SettingsTableViewController.swift"/>
+        <source-file src="src/ios/TwilioVideoPlugin.swift"/>
+        <source-file src="src/ios/TwilioVideoViewController.swift"/>
+        <resource-file src="src/ios/Resources/TwilioVideoSwift.storyboard" target="Resources/TwilioVideoSwift.storyboard" />
         <resource-file src="src/ios/Resources/end-call-ios-white-33px.png" target="Resources/end-call-ios-white-33px.png" />
         <resource-file src="src/ios/Resources/no-mic-ios-white-33px.png" target="Resources/no-mic-ios-white-33px.png" />
         <resource-file src="src/ios/Resources/no-video-ios-white-33px.png" target="Resources/no-video-ios-white-33px.png" />
@@ -35,7 +38,7 @@
         <framework src="CoreMedia.framework" />
         <framework src="SystemConfiguration.framework" />
         <framework src="libc++.tbd" />
-        <framework src="TwilioVideo" type="podspec" spec="~> 2.0.0-preview7" />
+        <framework src="TwilioVideo" type="podspec" spec="~> 2.0.0-preview8" />
 
         <preference name="CAMERA_USAGE_DESCRIPTION" />
         <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
@@ -66,9 +69,9 @@
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <activity android:name="cordova-plugin-twilio-video.TwilioVideoActivity" android:configChanges="orientation|screenSize" android:theme="@style/Theme.AppCompat.Light"></activity>
         </config-file>
-        <source-file src="src/android/VideoConversationPlugin.java" target-dir="src/org/apache/cordova/videoconversations" />
-        <source-file src="src/android/ConversationActivity.java" target-dir="src/org/apache/cordova/videoconversations" />
-        <source-file src="src/android/Dialog.java" target-dir="src/org/apache/cordova/videoconversations" />
+        <source-file src="src/android/TwilioVideoPlugin.java" target-dir="src/org/apache/cordova/twiliovideo" />
+        <source-file src="src/android/ConversationActivity.java" target-dir="src/org/apache/cordova/twiliovideo" />
+        <source-file src="src/android/Dialog.java" target-dir="src/org/apache/cordova/twiliovideo" />
         <framework src="src/android/twiliovideo.gradle" custom="true" type="gradleReference" />
         <framework src="com.google.android.gms:play-services-gcm:+" />
         <framework src="com.android.support:appcompat-v7:21+" />
