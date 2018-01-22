@@ -1,6 +1,9 @@
-package cordova-plugin-twilio-video;
+package org.apache.cordova.twiliovideo;
+
+import com.ipelia.yoobicv3.R;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,9 +50,6 @@ import com.twilio.video.Video;
 import com.twilio.video.VideoCodec;
 import com.twilio.video.VideoRenderer;
 import com.twilio.video.TwilioException;
-import com.twilio.video.quickstart.BuildConfig;
-import com.twilio.video.quickstart.R;
-import com.twilio.video.quickstart.dialog.Dialog;
 import com.twilio.video.CameraCapturer.CameraSource;
 import com.twilio.video.ConnectOptions;
 import com.twilio.video.LocalAudioTrack;
@@ -57,20 +57,19 @@ import com.twilio.video.LocalVideoTrack;
 import com.twilio.video.Room;
 import com.twilio.video.VideoTrack;
 import com.twilio.video.VideoView;
-import com.twilio.video.quickstart.util.CameraCapturerCompat;
+// import org.apache.cordova.twiliovideo.BuildConfig;
+// import org.apache.cordova.twiliovideo.R;
+import org.apache.cordova.twiliovideo.Dialog;
+import org.apache.cordova.twiliovideo.SettingsActivity;
+import org.apache.cordova.twiliovideo.CameraCapturerCompat;
 
 import java.util.Collections;
 import java.util.UUID;
 
-import static com.twilio.video.quickstart.R.drawable.ic_phonelink_ring_white_24dp;
-import static com.twilio.video.quickstart.R.drawable.ic_volume_up_white_24dp;
-
-import static com.twilio.video.quickstart.R.drawable.ic_phonelink_ring_white_24dp;
-import static com.twilio.video.quickstart.R.drawable.ic_volume_up_white_24dp;
 
 public class TwilioVideoActivity extends AppCompatActivity {
     private static final int CAMERA_MIC_PERMISSION_REQUEST_CODE = 1;
-    private static final String TAG = "VideoActivity";
+    private static final String TAG = "TwilioVideoActivity";
 
     /*
      * Audio and video tracks can be created with names. This feature is useful for categorizing
@@ -85,8 +84,8 @@ public class TwilioVideoActivity extends AppCompatActivity {
     /*
      * You must provide a Twilio Access Token to connect to the Video service
      */
-    private static final String TWILIO_ACCESS_TOKEN = BuildConfig.TWILIO_ACCESS_TOKEN;
-    private static final String ACCESS_TOKEN_SERVER = BuildConfig.TWILIO_ACCESS_TOKEN_SERVER;
+    // private static final String TWILIO_ACCESS_TOKEN = BuildConfig.TWILIO_ACCESS_TOKEN;
+    // private static final String ACCESS_TOKEN_SERVER = BuildConfig.TWILIO_ACCESS_TOKEN_SERVER;
 
     /*
      * Access token used to connect. This field will be set either from the console generated token
@@ -134,12 +133,11 @@ public class TwilioVideoActivity extends AppCompatActivity {
     private LocalAudioTrack localAudioTrack;
     private LocalVideoTrack localVideoTrack;
     private FloatingActionButton connectActionFab;
-    private FloatingActionButton disconnectActionFab;
+    // private FloatingActionButton disconnectActionFab;
     private FloatingActionButton switchCameraActionFab;
     private FloatingActionButton localVideoActionFab;
     private FloatingActionButton muteActionFab;
     private FloatingActionButton speakerActionFab;
-    private android.support.v7.app.AlertDialog alertDialog;
     private AlertDialog connectDialog;
     private AudioManager audioManager;
     private String remoteParticipantIdentity;
@@ -152,19 +150,19 @@ public class TwilioVideoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video);
+        setContentView(getResources().getIdentifier("activity_video", "layout", getPackageName()));
 
-        identityTextView = (TextView) findViewById(R.id.identity_textview);
-        primaryVideoView = findViewById(R.id.primary_video_view);
-        thumbnailVideoView = findViewById(R.id.thumbnail_video_view);
-        videoStatusTextView = findViewById(R.id.video_status_textview);
+        identityTextView = findViewById(getResources().getIdentifier("identity_textview", "id", getPackageName()));
+        primaryVideoView = findViewById(getResources().getIdentifier("primary_video_view", "id", getPackageName()));
+        thumbnailVideoView = findViewById(getResources().getIdentifier("thumbnail_video_view", "id", getPackageName()));
+        videoStatusTextView = findViewById(getResources().getIdentifier("video_status_textview", "id", getPackageName()));
 
-        disconnectActionFab = (FloatingActionButton) findViewById(R.id.disconnect_action_fab);
-        speakerActionFab = (FloatingActionButton) findViewById(R.id.speaker_action_fab);
-        connectActionFab = findViewById(R.id.connect_action_fab);
-        switchCameraActionFab = findViewById(R.id.switch_camera_action_fab);
-        localVideoActionFab = findViewById(R.id.local_video_action_fab);
-        muteActionFab = findViewById(R.id.mute_action_fab);
+        // disconnectActionFab = findViewById(getResources().getIdentifier("disconnect_action_fab", "id", getPackageName()));
+        speakerActionFab = findViewById(getResources().getIdentifier("speaker_action_fab", "id", getPackageName()));
+        connectActionFab = findViewById(getResources().getIdentifier("connect_action_fab", "id", getPackageName()));
+        switchCameraActionFab = findViewById(getResources().getIdentifier("switch_camera_action_fab", "id", getPackageName()));
+        localVideoActionFab = findViewById(getResources().getIdentifier("local_video_action_fab", "id", getPackageName()));
+        muteActionFab = findViewById(getResources().getIdentifier("mute_action_fab", "id", getPackageName()));
 
         /*
          * Get shared preferences to read settings
@@ -184,7 +182,9 @@ public class TwilioVideoActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         this.accessToken = intent.getStringExtra("token");
-        this.roomId =   intent.getStringExtra("roomId");
+        this.roomId = intent.getStringExtra("roomId");
+        Log.d(TAG, "Token:: " + accessToken);
+        Log.d(TAG, "RoomId:: " + roomId);
         audioManager.setSpeakerphoneOn(true);
 
         /*
@@ -194,24 +194,25 @@ public class TwilioVideoActivity extends AppCompatActivity {
             requestPermissionForCameraAndMicrophone();
         } else {
             createAudioAndVideoTracks();
-            connectToRoom(roomId);
         }
 
         /*
          * Set the initial state of the UI
          */
-        intializeUI();
+        initializeUI();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_video_activity, menu);
+        inflater.inflate(getResources().getIdentifier("menu_video_activity", "menu", getPackageName()), menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // menu_settings = getResources().getIdentifier("menu_settings", "id", getPackageName());
+        // speaker_menu_item = getResources().getIdentifier("speaker_menu_item", "id", getPackageName());
         switch (item.getItemId()) {
             case R.id.menu_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -219,10 +220,10 @@ public class TwilioVideoActivity extends AppCompatActivity {
              case R.id.speaker_menu_item:
                 if (audioManager.isSpeakerphoneOn()) {
                     audioManager.setSpeakerphoneOn(false);
-                    item.setIcon(ic_phonelink_ring_white_24dp);
+                    item.setIcon(getResources().getIdentifier("ic_phonelink_ring_white_24dp", "drawable", getPackageName()));
                 } else {
                     audioManager.setSpeakerphoneOn(true);
-                    item.setIcon(ic_volume_up_white_24dp);
+                    item.setIcon(getResources().getIdentifier("ic_volume_up_white_24dp", "drawable", getPackageName()));
                 }
                 return true;
             default:
@@ -246,7 +247,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
                 connectToRoom(roomId);
             } else {
                 Toast.makeText(this,
-                        R.string.permissions_needed,
+                        getResources().getIdentifier("permissions_needed", "string", getPackageName()),
                         Toast.LENGTH_LONG).show();
             }
         }
@@ -301,6 +302,11 @@ public class TwilioVideoActivity extends AppCompatActivity {
          * Update encoding parameters
          */
         encodingParameters = newEncodingParameters;
+
+        /*
+         * Connect to the room
+         */
+        connectToRoom(roomId);
     }
 
     @Override
@@ -365,7 +371,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
                 ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.RECORD_AUDIO)) {
             Toast.makeText(this,
-                    R.string.permissions_needed,
+                    getResources().getIdentifier("permissions_needed", "string", getPackageName()),
                     Toast.LENGTH_LONG).show();
         } else {
             ActivityCompat.requestPermissions(
@@ -394,26 +400,6 @@ public class TwilioVideoActivity extends AppCompatActivity {
         return (CameraCapturer.isSourceAvailable(CameraSource.FRONT_CAMERA)) ?
                 (CameraSource.FRONT_CAMERA) :
                 (CameraSource.BACK_CAMERA);
-    }
-
-    private void setAccessToken() {
-        if (!BuildConfig.USE_TOKEN_SERVER) {
-            /*
-             * OPTION 1 - Generate an access token from the getting started portal
-             * https://www.twilio.com/console/video/dev-tools/testing-tools and add
-             * the variable TWILIO_ACCESS_TOKEN setting it equal to the access token
-             * string in your local.properties file.
-             */
-            this.accessToken = TWILIO_ACCESS_TOKEN;
-        } else {
-            /*
-             * OPTION 2 - Retrieve an access token from your own web app.
-             * Add the variable ACCESS_TOKEN_SERVER assigning it to the url of your
-             * token server and the variable USE_TOKEN_SERVER=true to your
-             * local.properties file.
-             */
-            retrieveAccessTokenfromServer();
-        }
     }
 
     private void connectToRoom(String roomName) {
@@ -448,17 +434,31 @@ public class TwilioVideoActivity extends AppCompatActivity {
         connectOptionsBuilder.encodingParameters(encodingParameters);
 
         room = Video.connect(this, connectOptionsBuilder.build(), roomListener());
-        setDisconnectAction();
+        
+        // Disconnect action already set in initializeUI()
+        // setDisconnectAction();
+    }
+
+    /*
+     * Disconnect from room
+     */
+    private void disconnectFromRoom() {
+        if (room != null) {
+            room.disconnect();
+            disconnectedFromOnDestroy = true;
+        }
+        finish();
     }
 
     /*
      * The initial state when there is no active room.
      */
-    private void intializeUI() {
-        connectActionFab.setImageDrawable(ContextCompat.getDrawable(this,
-                R.drawable.ic_video_call_white_24dp));
-        connectActionFab.show();
-        connectActionFab.setOnClickListener(connectActionClickListener());
+    private void initializeUI() {
+        // connectActionFab.setImageDrawable(ContextCompat.getDrawable(this,
+        //         getResources().getIdentifier("ic_video_call_white_24dp", "drawable", getPackageName())));
+        // connectActionFab.show();
+        // connectActionFab.setOnClickListener(connectActionClickListener());
+        setDisconnectAction();
         switchCameraActionFab.show();
         switchCameraActionFab.setOnClickListener(switchCameraClickListener());
 
@@ -471,6 +471,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
         speakerActionFab.show();
         speakerActionFab.setOnClickListener(speakerClickListener());
     }
+
     /*
      * Get the preferred audio or video codec from shared preferences
      */
@@ -497,30 +498,24 @@ public class TwilioVideoActivity extends AppCompatActivity {
      * The actions performed during disconnect.
      */
     private void setDisconnectAction() {
-        // connectActionFab.hide();
-
-        // disconnectActionFab.show();
-        // disconnectActionFab.setOnClickListener(disconnectClickListener());
         connectActionFab.setImageDrawable(ContextCompat.getDrawable(this,
-                R.drawable.ic_call_end_white_24px));
+                getResources().getIdentifier("ic_call_end_white_24px", "drawable", getPackageName())));
         connectActionFab.show();
         connectActionFab.setOnClickListener(disconnectClickListener());
     }
 
-    /*
-     * Creates an connect UI dialog
-     */
-    private void showConnectDialog() {
-        EditText roomEditText = new EditText(this);
-        // alertDialog = Dialog.createConnectDialog(roomEditText,
-        //         connectClickListener(roomEditText), cancelConnectDialogClickListener(), this);
-        // alertDialog.show();
-        connectDialog = Dialog.createConnectDialog(roomEditText,
-                connectClickListener(roomEditText),
-                cancelConnectDialogClickListener(),
-                this);
-        connectDialog.show();
-    }
+//    /*
+//     * Creates an connect UI dialog
+//     */
+//    private void showConnectDialog() {
+//        EditText roomEditText = new EditText(this);
+//        roomEditText.setText(roomId);
+//        connectDialog = Dialog.createConnectDialog(roomEditText,
+//                connectClickListener(roomEditText),
+//                cancelConnectDialogClickListener(),
+//                this);
+//        connectDialog.show();
+//    }
 
     /*
      * Called when remote participant joins the room
@@ -537,8 +532,8 @@ public class TwilioVideoActivity extends AppCompatActivity {
             return;
         }
         remoteParticipantIdentity = remoteParticipant.getIdentity();
-        // videoStatusTextView.setText("RemoteParticipant "+ remoteParticipantIdentity + " joined");
-        videoStatusTextView.setText("");
+        Log.d(TAG, String.format("RemoteParticipant %s left.", remoteParticipantIdentity));
+        videoStatusTextView.setText(remoteParticipantIdentity);
 
         /*
          * Add remote participant renderer
@@ -585,6 +580,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
      * Called when remote participant leaves the room
      */
     private void removeRemoteParticipant(RemoteParticipant remoteParticipant) {
+        Log.d(TAG, String.format("RemoteParticipant %s left.", remoteParticipant.getIdentity()));
         // videoStatusTextView.setText("RemoteParticipant " + remoteParticipant.getIdentity() +
         //     " left.");
         if (!remoteParticipant.getIdentity().equals(remoteParticipantIdentity)) {
@@ -605,7 +601,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
                 removeParticipantVideo(remoteVideoTrackPublication.getRemoteVideoTrack());
             }
         }
-        participant.setListener(null);
+        remoteParticipant.setListener(null);
         moveLocalVideoToPrimaryView();
     }
 
@@ -633,6 +629,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
         return new Room.Listener() {
             @Override
             public void onConnected(Room room) {
+                Log.d(TAG, String.format("onConnected: [Room: name=%s]", room.getName())));
                 localParticipant = room.getLocalParticipant();
                 // videoStatusTextView.setText("Connected to " + room.getName());
                 setTitle(room.getName());
@@ -645,32 +642,44 @@ public class TwilioVideoActivity extends AppCompatActivity {
 
             @Override
             public void onConnectFailure(Room room, TwilioException e) {
+                Log.d(TAG, String.format("onConnectFailure [Room: name=%s]", room.getName()));
                 videoStatusTextView.setText("Failed to connect");
                 configureAudio(false);
-                intializeUI();
+                initializeUI();
             }
 
             @Override
             public void onDisconnected(Room room, TwilioException e) {
+                Log.d(TAG, String.format("onDisconnected: [Room: name=%s]", room.getName()));
                 localParticipant = null;
                 videoStatusTextView.setText("Disconnected from " + room.getName());
                 TwilioVideoActivity.this.room = null;
                 // Only reinitialize the UI if disconnect was not called from onDestroy()
                 if (!disconnectedFromOnDestroy) {
                     configureAudio(false);
-                    intializeUI();
+                    initializeUI();
                     moveLocalVideoToPrimaryView();
                 }
             }
 
             @Override
             public void onParticipantConnected(Room room, RemoteParticipant remoteParticipant) {
+                Log.d(TAG, String.format("onParticipantConnected:" +
+                                "[Room: name=%s]," +
+                                "[RemoteParticipant: identity=%s], ",
+                                room.getName(),
+                                remoteParticipant.getIdentity()));
                 addRemoteParticipant(remoteParticipant);
 
             }
 
             @Override
             public void onParticipantDisconnected(Room room, RemoteParticipant remoteParticipant) {
+                Log.d(TAG, String.format("onParticipantConnected:" +
+                                "[Room: name=%s]," +
+                                "[RemoteParticipant: identity=%s], ",
+                                room.getName(),
+                                remoteParticipant.getIdentity()));
                 videoStatusTextView.setText("Participant disconnected");
                 removeRemoteParticipant(remoteParticipant);
             }
@@ -700,7 +709,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
             @Override
             public void onAudioTrackPublished(RemoteParticipant remoteParticipant,
                                               RemoteAudioTrackPublication remoteAudioTrackPublication) {
-                Log.i(TAG, String.format("onAudioTrackPublished: " +
+                Log.d(TAG, String.format("onAudioTrackPublished: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteAudioTrackPublication: sid=%s, enabled=%b, " +
                                 "subscribed=%b, name=%s]",
@@ -715,7 +724,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
             @Override
             public void onAudioTrackUnpublished(RemoteParticipant remoteParticipant,
                                                 RemoteAudioTrackPublication remoteAudioTrackPublication) {
-                Log.i(TAG, String.format("onAudioTrackUnpublished: " +
+                Log.d(TAG, String.format("onAudioTrackUnpublished: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteAudioTrackPublication: sid=%s, enabled=%b, " +
                                 "subscribed=%b, name=%s]",
@@ -730,7 +739,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
             @Override
             public void onDataTrackPublished(RemoteParticipant remoteParticipant,
                                              RemoteDataTrackPublication remoteDataTrackPublication) {
-                Log.i(TAG, String.format("onDataTrackPublished: " +
+                Log.d(TAG, String.format("onDataTrackPublished: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteDataTrackPublication: sid=%s, enabled=%b, " +
                                 "subscribed=%b, name=%s]",
@@ -745,7 +754,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
             @Override
             public void onDataTrackUnpublished(RemoteParticipant remoteParticipant,
                                                RemoteDataTrackPublication remoteDataTrackPublication) {
-                Log.i(TAG, String.format("onDataTrackUnpublished: " +
+                Log.d(TAG, String.format("onDataTrackUnpublished: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteDataTrackPublication: sid=%s, enabled=%b, " +
                                 "subscribed=%b, name=%s]",
@@ -760,7 +769,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
             @Override
             public void onVideoTrackPublished(RemoteParticipant remoteParticipant,
                                               RemoteVideoTrackPublication remoteVideoTrackPublication) {
-                Log.i(TAG, String.format("onVideoTrackPublished: " +
+                Log.d(TAG, String.format("onVideoTrackPublished: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteVideoTrackPublication: sid=%s, enabled=%b, " +
                                 "subscribed=%b, name=%s]",
@@ -775,7 +784,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
             @Override
             public void onVideoTrackUnpublished(RemoteParticipant remoteParticipant,
                                                 RemoteVideoTrackPublication remoteVideoTrackPublication) {
-                Log.i(TAG, String.format("onVideoTrackUnpublished: " +
+                Log.d(TAG, String.format("onVideoTrackUnpublished: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteVideoTrackPublication: sid=%s, enabled=%b, " +
                                 "subscribed=%b, name=%s]",
@@ -791,7 +800,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
             public void onAudioTrackSubscribed(RemoteParticipant remoteParticipant,
                                                RemoteAudioTrackPublication remoteAudioTrackPublication,
                                                RemoteAudioTrack remoteAudioTrack) {
-                Log.i(TAG, String.format("onAudioTrackSubscribed: " +
+                Log.d(TAG, String.format("onAudioTrackSubscribed: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteAudioTrack: enabled=%b, playbackEnabled=%b, name=%s]",
                         remoteParticipant.getIdentity(),
@@ -805,7 +814,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
             public void onAudioTrackUnsubscribed(RemoteParticipant remoteParticipant,
                                                  RemoteAudioTrackPublication remoteAudioTrackPublication,
                                                  RemoteAudioTrack remoteAudioTrack) {
-                Log.i(TAG, String.format("onAudioTrackUnsubscribed: " +
+                Log.d(TAG, String.format("onAudioTrackUnsubscribed: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteAudioTrack: enabled=%b, playbackEnabled=%b, name=%s]",
                         remoteParticipant.getIdentity(),
@@ -819,7 +828,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
             public void onAudioTrackSubscriptionFailed(RemoteParticipant remoteParticipant,
                                                        RemoteAudioTrackPublication remoteAudioTrackPublication,
                                                        TwilioException twilioException) {
-                Log.i(TAG, String.format("onAudioTrackSubscriptionFailed: " +
+                Log.d(TAG, String.format("onAudioTrackSubscriptionFailed: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteAudioTrackPublication: sid=%b, name=%s]" +
                                 "[TwilioException: code=%d, message=%s]",
@@ -835,7 +844,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
             public void onDataTrackSubscribed(RemoteParticipant remoteParticipant,
                                               RemoteDataTrackPublication remoteDataTrackPublication,
                                               RemoteDataTrack remoteDataTrack) {
-                Log.i(TAG, String.format("onDataTrackSubscribed: " +
+                Log.d(TAG, String.format("onDataTrackSubscribed: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteDataTrack: enabled=%b, name=%s]",
                         remoteParticipant.getIdentity(),
@@ -848,7 +857,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
             public void onDataTrackUnsubscribed(RemoteParticipant remoteParticipant,
                                                 RemoteDataTrackPublication remoteDataTrackPublication,
                                                 RemoteDataTrack remoteDataTrack) {
-                Log.i(TAG, String.format("onDataTrackUnsubscribed: " +
+                Log.d(TAG, String.format("onDataTrackUnsubscribed: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteDataTrack: enabled=%b, name=%s]",
                         remoteParticipant.getIdentity(),
@@ -861,7 +870,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
             public void onDataTrackSubscriptionFailed(RemoteParticipant remoteParticipant,
                                                       RemoteDataTrackPublication remoteDataTrackPublication,
                                                       TwilioException twilioException) {
-                Log.i(TAG, String.format("onDataTrackSubscriptionFailed: " +
+                Log.d(TAG, String.format("onDataTrackSubscriptionFailed: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteDataTrackPublication: sid=%b, name=%s]" +
                                 "[TwilioException: code=%d, message=%s]",
@@ -870,20 +879,20 @@ public class TwilioVideoActivity extends AppCompatActivity {
                         remoteDataTrackPublication.getTrackName(),
                         twilioException.getCode(),
                         twilioException.getMessage()));
-                videoStatusTextView.setText("onDataTrackSubscriptionFailed");
+                // videoStatusTextView.setText("onDataTrackSubscriptionFailed");
             }
 
             @Override
             public void onVideoTrackSubscribed(RemoteParticipant remoteParticipant,
                                                RemoteVideoTrackPublication remoteVideoTrackPublication,
                                                RemoteVideoTrack remoteVideoTrack) {
-                Log.i(TAG, String.format("onVideoTrackSubscribed: " +
+                Log.d(TAG, String.format("onVideoTrackSubscribed: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteVideoTrack: enabled=%b, name=%s]",
                         remoteParticipant.getIdentity(),
                         remoteVideoTrack.isEnabled(),
                         remoteVideoTrack.getName()));
-                videoStatusTextView.setText("onVideoTrackSubscribed");
+                // videoStatusTextView.setText("onVideoTrackSubscribed");
                 addRemoteParticipantVideo(remoteVideoTrack);
             }
 
@@ -891,13 +900,13 @@ public class TwilioVideoActivity extends AppCompatActivity {
             public void onVideoTrackUnsubscribed(RemoteParticipant remoteParticipant,
                                                  RemoteVideoTrackPublication remoteVideoTrackPublication,
                                                  RemoteVideoTrack remoteVideoTrack) {
-                Log.i(TAG, String.format("onVideoTrackUnsubscribed: " +
+                Log.d(TAG, String.format("onVideoTrackUnsubscribed: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteVideoTrack: enabled=%b, name=%s]",
                         remoteParticipant.getIdentity(),
                         remoteVideoTrack.isEnabled(),
                         remoteVideoTrack.getName()));
-                videoStatusTextView.setText("onVideoTrackUnsubscribed");
+                // videoStatusTextView.setText("onVideoTrackUnsubscribed");
                 removeParticipantVideo(remoteVideoTrack);
             }
 
@@ -905,7 +914,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
             public void onVideoTrackSubscriptionFailed(RemoteParticipant remoteParticipant,
                                                        RemoteVideoTrackPublication remoteVideoTrackPublication,
                                                        TwilioException twilioException) {
-                Log.i(TAG, String.format("onVideoTrackSubscriptionFailed: " +
+                Log.d(TAG, String.format("onVideoTrackSubscriptionFailed: " +
                                 "[RemoteParticipant: identity=%s], " +
                                 "[RemoteVideoTrackPublication: sid=%b, name=%s]" +
                                 "[TwilioException: code=%d, message=%s]",
@@ -914,7 +923,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
                         remoteVideoTrackPublication.getTrackName(),
                         twilioException.getCode(),
                         twilioException.getMessage()));
-                videoStatusTextView.setText("onVideoTrackSubscriptionFailed");
+                // videoStatusTextView.setText("onVideoTrackSubscriptionFailed");
                 Snackbar.make(connectActionFab,
                         String.format("Failed to subscribe to %s video track",
                                 remoteParticipant.getIdentity()),
@@ -925,78 +934,91 @@ public class TwilioVideoActivity extends AppCompatActivity {
             @Override
             public void onAudioTrackEnabled(RemoteParticipant remoteParticipant,
                                             RemoteAudioTrackPublication remoteAudioTrackPublication) {
-
+                Log.d(TAG, String.format("onAudioTrackEnabled: " +
+                                "[RemoteParticipant: identity=%s], " +
+                                "[RemoteAudioTrackPublication: sid=%b, name=%s]",
+                        remoteParticipant.getIdentity(),
+                        remoteAudioTrackPublication.getTrackSid(),
+                        remoteAudioTrackPublication.getTrackName()));
             }
 
             @Override
             public void onAudioTrackDisabled(RemoteParticipant remoteParticipant,
                                              RemoteAudioTrackPublication remoteAudioTrackPublication) {
-
+                Log.d(TAG, String.format("onAudioTrackDisabled: " +
+                                "[RemoteParticipant: identity=%s], " +
+                                "[RemoteAudioTrackPublication: sid=%b, name=%s]",
+                        remoteParticipant.getIdentity(),
+                        remoteAudioTrackPublication.getTrackSid(),
+                        remoteAudioTrackPublication.getTrackName()));
             }
 
             @Override
             public void onVideoTrackEnabled(RemoteParticipant remoteParticipant,
                                             RemoteVideoTrackPublication remoteVideoTrackPublication) {
-
+                Log.d(TAG, String.format("onVideoTrackEnabled: " +
+                                "[RemoteParticipant: identity=%s], " +
+                                "[RemoteVideoTrackPublication: sid=%b, name=%s]"
+                        remoteParticipant.getIdentity(),
+                        remoteVideoTrackPublication.getTrackSid(),
+                        remoteVideoTrackPublication.getTrackName()));
             }
 
             @Override
             public void onVideoTrackDisabled(RemoteParticipant remoteParticipant,
                                              RemoteVideoTrackPublication remoteVideoTrackPublication) {
-
+                Log.d(TAG, String.format("onVideoTrackDisabled: " +
+                                "[RemoteParticipant: identity=%s], " +
+                                "[RemoteVideoTrackPublication: sid=%b, name=%s]"
+                        remoteParticipant.getIdentity(),
+                        remoteVideoTrackPublication.getTrackSid(),
+                        remoteVideoTrackPublication.getTrackName()));
             }
         };
     }
 
-    private DialogInterface.OnClickListener connectClickListener(final EditText roomEditText) {
-        return new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                /*
-                 * Connect to room
-                 */
-                connectToRoom(roomEditText.getText().toString());
-            }
-        };
-    }
+//    private DialogInterface.OnClickListener connectClickListener(final EditText roomEditText) {
+//        return new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                /*
+//                 * Connect to room
+//                 */
+//                connectToRoom(roomEditText.getText().toString());
+//            }
+//        };
+//    }
 
     private View.OnClickListener disconnectClickListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                 * Disconnect from room
-                 */
-                if (room != null) {
-                    room.disconnect();
-					disconnectedFromOnDestroy = true;
-                }
-                //intializeUI();
-                finish();
+                disconnectFromRoom();
             }
         };
     }
-
-    private View.OnClickListener connectActionClickListener() {
-        return new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                showConnectDialog();
-            }
-        };
-    }
-
-    private DialogInterface.OnClickListener cancelConnectDialogClickListener() {
-        return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                intializeUI();
-                alertDialog.dismiss();
-                connectDialog.dismiss();
-            }
-        };
-    }
+//
+//    private View.OnClickListener connectActionClickListener() {
+//        return new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v) {
+//                // showConnectDialog();
+//                connectToRoom(roomId);
+//            }
+//        };
+//    }
+//
+//    private DialogInterface.OnClickListener cancelConnectDialogClickListener() {
+//        return new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                initializeUI();
+//                // alertDialog.dismiss();
+//                connectDialog.dismiss();
+//            }
+//        };
+//    }
 
     private View.OnClickListener switchCameraClickListener() {
         return new View.OnClickListener() {
@@ -1027,14 +1049,14 @@ public class TwilioVideoActivity extends AppCompatActivity {
                     localVideoTrack.enable(enable);
                     int icon;
                     if (enable) {
-                        icon = R.drawable.ic_videocam_white_24dp;
+                        icon = getResources().getIdentifier("ic_videocam_white_24dp", "drawable", getPackageName());
                         switchCameraActionFab.show();
                     } else {
-                        icon = R.drawable.ic_videocam_off_black_24dp;
+                        icon = getResources().getIdentifier("ic_videocam_off_black_24dp", "drawable", getPackageName());
                         switchCameraActionFab.hide();
                     }
                     localVideoActionFab.setImageDrawable(
-                            ContextCompat.getDrawable(VideoActivity.this, icon));
+                            ContextCompat.getDrawable(TwilioVideoActivity.this, icon));
                 }
             }
         };
@@ -1053,7 +1075,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
                     boolean enable = !localAudioTrack.isEnabled();
                     localAudioTrack.enable(enable);
                     int icon = enable ?
-                            R.drawable.ic_mic_white_24dp : R.drawable.ic_mic_off_black_24dp;
+                            getResources().getIdentifier("ic_mic_white_24dp", "drawable", getPackageName()) : getResources().getIdentifier("ic_mic_off_black_24dp", "drawable", getPackageName());
                     muteActionFab.setImageDrawable(ContextCompat.getDrawable(
                             TwilioVideoActivity.this, icon));
                 }
@@ -1068,31 +1090,14 @@ public class TwilioVideoActivity extends AppCompatActivity {
                 if (audioManager.isSpeakerphoneOn()) {
                     audioManager.setSpeakerphoneOn(false);
                     speakerActionFab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),
-                            R.drawable.ic_volume_down_white_24px));
+                            getResources().getIdentifier("ic_phonelink_ring_white_24dp", "drawable", getPackageName())));
                 } else {
                     audioManager.setSpeakerphoneOn(true);
                     speakerActionFab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),
-                            R.drawable.ic_volume_down_green_24px));
+                            getResources().getIdentifier("ic_volume_up_white_24dp", "drawable", getPackageName())));
                 }
             }
         };
-    private void retrieveAccessTokenfromServer() {
-        Ion.with(this)
-                .load(String.format("%s?identity=%s", ACCESS_TOKEN_SERVER,
-                        UUID.randomUUID().toString()))
-                .asString()
-                .setCallback(new FutureCallback<String>() {
-                    @Override
-                    public void onCompleted(Exception e, String token) {
-                        if (e == null) {
-                            VideoActivity.this.accessToken = token;
-                        } else {
-                            Toast.makeText(VideoActivity.this,
-                                    R.string.error_retrieving_access_token, Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    }
-                });
     }
 
     // private void retrieveAccessTokenfromServer() {
@@ -1106,7 +1111,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
     //                         TwilioVideoActivity.this.accessToken = result.get("token").getAsString();
     //                     } else {
     //                         Toast.makeText(TwilioVideoActivity.this,
-    //                                 R.string.error_retrieving_access_token, Toast.LENGTH_LONG)
+    //                                 getResources().getIdentifier("error_retrieving_access_token", "string", getPackageName()), Toast.LENGTH_LONG)
     //                                 .show();
     //                     }
     //                 }

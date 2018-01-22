@@ -1,4 +1,4 @@
-package cordova-plugin-twilio-video;
+package org.apache.cordova.twiliovideo;
 
 import org.apache.cordova.BuildHelper;
 import org.apache.cordova.CallbackContext;
@@ -18,7 +18,7 @@ import android.os.Bundle;
 
 
 public class TwilioVideoPlugin extends CordovaPlugin {
-
+    private static final String TAG = "TwilioVideoPlugin";
 
     public CallbackContext callbackContext;
     private CordovaInterface cordova;
@@ -34,8 +34,9 @@ public class TwilioVideoPlugin extends CordovaPlugin {
 
     
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        LOG.d(TAG, action + "::" + args);
 		this.callbackContext = callbackContext;
-		if (action.equals("open")) {
+		if (action.equals("openRoom")) {
 		   	this.openRoom(args);
 		}
         return true;
@@ -43,8 +44,8 @@ public class TwilioVideoPlugin extends CordovaPlugin {
 
 	public void openRoom(final JSONArray args) {
         try {
-            this.roomId = args.getString(0);
-            this.token = args.getString(1);
+            this.token = args.getString(0);
+            this.roomId = args.getString(1);
             final CordovaPlugin that = this;
             final String token = this.token;
             final String roomId = this.roomId;
@@ -53,21 +54,20 @@ public class TwilioVideoPlugin extends CordovaPlugin {
             LOG.d("ROOMID", roomId);
      		cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
-
                     Intent intentTwilioVideo = new Intent(that.cordova.getActivity().getBaseContext(), TwilioVideoActivity.class);
         			intentTwilioVideo.putExtra("token", token);
                     intentTwilioVideo.putExtra("roomId", roomId);
                     // avoid calling other phonegap apps
-                    //intentTwilioVideo.setPackage(that.cordova.getActivity().getApplicationContext().getPackageName());
+                    intentTwilioVideo.setPackage(that.cordova.getActivity().getApplicationContext().getPackageName());
                     //that.cordova.startActivityForResult(that, intentTwilioVideo);
                     //that.cordova.getActivity().startActivity(intentTwilioVideo);
                     that.cordova.startActivityForResult(that, intentTwilioVideo, 0);
                 }
-                    
+
             });
         } catch (JSONException e) {
-            //Log.e(TAG, "Invalid JSON string: " + json, e);
-            //return null;
+            LOG.e(TAG, "Failed to open room with args: " + args, e);
+            // return null;
         }
     }
 

@@ -1,3 +1,4 @@
+'use strict';
 var fs = require('fs');
 var path = require('path');
 
@@ -9,28 +10,32 @@ function replace_string_in_file(filename, to_replace, replace_with) {
     fs.writeFileSync(filename, result, 'utf8');
 }
 
-var target = "stage";
-if (process.env.TARGET) {
-    target = process.env.TARGET;
-}
+var PLUGIN_NAME = 'cordova-plugin-twilio-video';
+var PLUGIN_PACKAGE = 'org.apache.cordova.twiliovideo';
+var CORDOVA_SOURCES_PATH = path.join('platforms', 'src', 'org', 'apache', 'cordova', 'twiliovideo');
 
-    var ourconfigfile = path.join( "plugins", "android.json");
-    var configobj = JSON.parse(fs.readFileSync(ourconfigfile, 'utf8'));
-  // Add java files where you want to add R.java imports in the following array
+var androidPluginConfigPath = path.join('plugins', 'android.json');
+var androidPluginConfig = JSON.parse(fs.readFileSync(androidPluginConfigPath, 'utf8'));
 
-    var filestoreplace = [
-        "platforms/android/src/org/apache/cordova/twiliovideo/TwilioVideoActivity.java"
-    ];
-    filestoreplace.forEach(function(val, index, array) {
-        if (fs.existsSync(val)) {
-          console.log("Android platform available !");
-          //Getting the package name from the android.json file,replace with your plugin's id
-          var packageName = configobj.installed_plugins["cordova-plugin-twilio-video"]["PACKAGE_NAME"];
-          console.log("With the package name: "+packageName);
-          console.log("Adding import for R.java");
-            replace_string_in_file(val,"package org.apache.cordova.plugin;","package org.apache.cordova.plugin;\n\nimport "+packageName+".R;");
+var appPackageName = androidPluginConfig.installed_plugins[PLUGIN_NAME].PACKAGE_NAME;
+// Add java files where you want to add R.java imports in the following array
 
-        } else {
-            console.log("No android platform found! :(");
-        }
-    });
+
+var filesToReplace = [
+    path.join(CORDOVA_SOURCES_PATH, 'TwilioVideoActivity.java'),
+    path.join(CORDOVA_SOURCES_PATH, 'SettingsActivity.java'),
+    path.join(CORDOVA_SOURCES_PATH, 'Dialog.java')
+];
+
+filesToReplace.forEach(function(file) {
+    if (fs.existsSync(file)) {
+        console.log('Android platform available !');
+        //Getting the package name from the android.json file,replace with your plugin's id
+        console.log('With the package name: ' + appPackageName);
+        console.log('Adding import for R.java');
+        replace_string_in_file(file, 'package '+ PLUGIN_PACKAGE + ';', 'package ' + PLUGIN_PACKAGE + ';\n\nimport ' + appPackageName + '.R;');
+
+    } else {
+        console.log('No android platform found! :(');
+    }
+});

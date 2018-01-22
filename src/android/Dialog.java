@@ -1,4 +1,6 @@
-package cordova-plugin-twilio-video;
+package org.apache.cordova.twiliovideo;
+
+import com.ipelia.yoobicv3.R;
 
 import android.content.Context;
 import android.content.DialogInterface;

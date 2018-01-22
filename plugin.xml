@@ -38,7 +38,7 @@
         <framework src="CoreMedia.framework" />
         <framework src="SystemConfiguration.framework" />
         <framework src="libc++.tbd" />
-        <framework src="TwilioVideo" type="podspec" spec="~> 2.0.0-preview8" />
+        <framework src="TwilioVideo" type="podspec" spec="~> 2.0.0-preview9" />
 
         <preference name="CAMERA_USAGE_DESCRIPTION" />
         <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
@@ -53,12 +53,16 @@
         <hook type="after_plugin_install" src="hooks/after_plugin_install/hook-add-r-import.js" />
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="TwilioVideo">
-                <param name="android-package" value="cordova-plugin-twilio-video.TwilioVideo" />
+                <param name="android-package" value="org.apache.cordova.twiliovideo.TwilioVideoPlugin" />
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
-            <uses-feature android:name="android.hardware.camera" />
+            <uses-feature android:name="android.hardware.camera" android:required="true" />
+            <uses-feature android:name="android.hardware.camera.front" />
             <uses-feature android:name="android.hardware.camera.autofocus" />
+            <uses-feature android:name="android.hardware.audio.low_latency" />
+            <uses-feature android:name="android.hardware.audio.output" />
+            <uses-feature android:name="android.hardware.microphone" />
             <uses-permission android:name="android.permission.CAMERA" />
             <uses-permission android:name="android.permission.INTERNET" />
             <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -67,33 +71,56 @@
             <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <activity android:name="cordova-plugin-twilio-video.TwilioVideoActivity" android:configChanges="orientation|screenSize" android:theme="@style/Theme.AppCompat.Light"></activity>
+            <activity android:name="org.apache.cordova.twiliovideo.TwilioVideoActivity" android:configChanges="orientation|screenSize" android:theme="@style/Theme.AppCompat.Light"></activity>
         </config-file>
         <source-file src="src/android/TwilioVideoPlugin.java" target-dir="src/org/apache/cordova/twiliovideo" />
-        <source-file src="src/android/ConversationActivity.java" target-dir="src/org/apache/cordova/twiliovideo" />
+        <source-file src="src/android/TwilioVideoActivity.java" target-dir="src/org/apache/cordova/twiliovideo" />
         <source-file src="src/android/Dialog.java" target-dir="src/org/apache/cordova/twiliovideo" />
+        <source-file src="src/android/CameraCapturerCompat.java" target-dir="src/org/apache/cordova/twiliovideo" />
+        <source-file src="src/android/SettingsActivity.java" target-dir="src/org/apache/cordova/twiliovideo" />
         <framework src="src/android/twiliovideo.gradle" custom="true" type="gradleReference" />
         <framework src="com.google.android.gms:play-services-gcm:+" />
         <framework src="com.android.support:appcompat-v7:21+" />
+        <framework src="com.android.support:preference-v14:21+" />
+        <framework src="com.android.support:design:21+" />
+        <framework src="com.twilio:video-android:2+" />
+        <framework src="com.koushikdutta.ion:ion:2.1.7+" />
 
+        <resource-file src="src/android/res/drawable/ic_call_black_24dp.xml" target="res/drawable/ic_call_black_24dp.xml" />
         <resource-file src="src/android/res/drawable/ic_call_black_24dp.xml" target="res/drawable/ic_call_black_24dp.xml" />
         <resource-file src="src/android/res/drawable/ic_call_end_white_24px.xml" target="res/drawable/ic_call_end_white_24px.xml" />
         <resource-file src="src/android/res/drawable/ic_call_white_24px.xml" target="res/drawable/ic_call_white_24px.xml" />
+        <resource-file src="src/android/res/drawable/ic_launcher_background.xml" target="res/drawable/ic_launcher_background.xml" />
         <resource-file src="src/android/res/drawable/ic_mic_green_24px.xml" target="res/drawable/ic_mic_green_24px.xml" />
+        <resource-file src="src/android/res/drawable/ic_mic_off_black_24dp.xml" target="res/drawable/ic_mic_off_black_24dp.xml" />
         <resource-file src="src/android/res/drawable/ic_mic_off_red_24px.xml" target="res/drawable/ic_mic_off_red_24px.xml" />
+        <resource-file src="src/android/res/drawable/ic_mic_white_24dp.xml" target="res/drawable/ic_mic_white_24dp.xml" />
+        <resource-file src="src/android/res/drawable/ic_phonelink_ring_white_24dp.xml" target="res/drawable/ic_phonelink_ring_white_24dp.xml" />
         <resource-file src="src/android/res/drawable/ic_switch_camera_512dp.xml" target="res/drawable/ic_switch_camera_512dp.xml" />
+        <resource-file src="src/android/res/drawable/ic_switch_camera_white_24dp.xml" target="res/drawable/ic_switch_camera_white_24dp.xml" />
+        <resource-file src="src/android/res/drawable/ic_video_call_black_24dp.xml" target="res/drawable/ic_video_call_black_24dp.xml" />
+        <resource-file src="src/android/res/drawable/ic_video_call_white_24dp.xml" target="res/drawable/ic_video_call_white_24dp.xml" />
         <resource-file src="src/android/res/drawable/ic_videocam_green_24px.xml" target="res/drawable/ic_videocam_green_24px.xml" />
+        <resource-file src="src/android/res/drawable/ic_videocam_off_black_24dp.xml" target="res/drawable/ic_videocam_off_black_24dp.xml" />
         <resource-file src="src/android/res/drawable/ic_videocam_off_red_24px.xml" target="res/drawable/ic_videocam_off_red_24px.xml" />
+        <resource-file src="src/android/res/drawable/ic_videocam_white_24dp.xml" target="res/drawable/ic_videocam_white_24dp.xml" />
         <resource-file src="src/android/res/drawable/ic_volume_down_green_24px.xml" target="res/drawable/ic_volume_down_green_24px.xml" />
         <resource-file src="src/android/res/drawable/ic_volume_down_white_24px.xml" target="res/drawable/ic_volume_down_white_24px.xml" />
+        <resource-file src="src/android/res/drawable/ic_volume_up_white_24dp.xml" target="res/drawable/ic_volume_up_white_24dp.xml" />
 
         <resource-file src="src/android/res/layout/activity_video.xml" target="res/layout/activity_video.xml" />
         <resource-file src="src/android/res/layout/content_video.xml" target="res/layout/content_video.xml" />
+        <resource-file src="src/android/res/layout/preference_dialog_number_edittext.xml" target="res/layout/preference_dialog_number_edittext.xml" />
 
         <resource-file src="src/android/res/values/colors.xml" target="res/values/colors.xml" />
         <resource-file src="src/android/res/values/dimens.xml" target="res/values/dimens.xml" />
         <resource-file src="src/android/res/values/strings.xml" target="res/values/strings.xml" />
         <resource-file src="src/android/res/values/styles.xml" target="res/values/styles.xml" />
+
+        <resource-file src="src/android/res/menu/menu.xml" target="res/menu/menu.xml" />
+        <resource-file src="src/android/res/menu/menu_video_activity.xml" target="res/menu/menu_video_activity.xml" />
+
+        <resource-file src="src/android/res/xml/settings.xml" target="res/xml/settings.xml" />
 
         <resource-file src="src/android/res/values-v21/styles.xml" target="res/values-v21/styles.xml" />
         <resource-file src="src/android/res/values-w820dp/dimens.xml" target="res/values-w820dp/dimens.xml" />
