@@ -629,7 +629,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
         return new Room.Listener() {
             @Override
             public void onConnected(Room room) {
-                Log.d(TAG, String.format("onConnected: [Room: name=%s]", room.getName())));
+                Log.d(TAG, String.format("onConnected: [Room: name=%s]", room.getName()));
                 localParticipant = room.getLocalParticipant();
                 // videoStatusTextView.setText("Connected to " + room.getName());
                 setTitle(room.getName());
@@ -958,7 +958,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
                                             RemoteVideoTrackPublication remoteVideoTrackPublication) {
                 Log.d(TAG, String.format("onVideoTrackEnabled: " +
                                 "[RemoteParticipant: identity=%s], " +
-                                "[RemoteVideoTrackPublication: sid=%b, name=%s]"
+                                "[RemoteVideoTrackPublication: sid=%b, name=%s]",
                         remoteParticipant.getIdentity(),
                         remoteVideoTrackPublication.getTrackSid(),
                         remoteVideoTrackPublication.getTrackName()));
@@ -969,7 +969,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
                                              RemoteVideoTrackPublication remoteVideoTrackPublication) {
                 Log.d(TAG, String.format("onVideoTrackDisabled: " +
                                 "[RemoteParticipant: identity=%s], " +
-                                "[RemoteVideoTrackPublication: sid=%b, name=%s]"
+                                "[RemoteVideoTrackPublication: sid=%b, name=%s]",
                         remoteParticipant.getIdentity(),
                         remoteVideoTrackPublication.getTrackSid(),
                         remoteVideoTrackPublication.getTrackName()));

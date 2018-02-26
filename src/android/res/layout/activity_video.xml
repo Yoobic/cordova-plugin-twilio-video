@@ -38,9 +38,9 @@
             android:id="@+id/mute_action_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fabSize="mini"
             android:layout_gravity="center"
-            android:src="@drawable/ic_mic_white_24dp" />
+            android:src="@drawable/ic_mic_white_24dp"
+            app:fabSize="mini" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/connect_action_fab"
