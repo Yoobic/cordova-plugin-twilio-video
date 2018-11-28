@@ -1,12 +1,12 @@
 repositories {
     jcenter()
+    google()
 }
 
-
 dependencies {
-    implementation 'com.twilio:video-android:2+'
-    implementation 'com.koushikdutta.ion:ion:2.1.7'
-    implementation 'com.android.support:appcompat-v7:25.3.1'
-    implementation 'com.android.support:preference-v14:25.3.1'
-    implementation 'com.android.support:design:25.3.1'
+    implementation 'com.twilio:video-android:2.0.0-beta2'
+    implementation 'com.koushikdutta.ion:ion:2+'
+    implementation "com.android.support:appcompat-v7:27+"
+    implementation "com.android.support:preference-v14:27+"
+    implementation "com.android.support:design:27+"
 }

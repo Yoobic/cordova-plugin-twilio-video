@@ -1,11 +1,11 @@
 package org.apache.cordova.twiliovideo;
 
-import com.ipelia.yoobicv3.R;
+//import com.ipelia.yoobicv3.R;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+//import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
+//import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -23,17 +23,17 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+// import android.view.Menu;
+// import android.view.MenuInflater;
+// import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
+//import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.gson.JsonObject;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
+//
+//import com.google.gson.JsonObject;
+//import com.koushikdutta.async.future.FutureCallback;
+//import com.koushikdutta.ion.Ion;
 import com.twilio.video.AudioCodec;
 import com.twilio.video.EncodingParameters;
 import com.twilio.video.CameraCapturer;
@@ -59,15 +59,23 @@ import com.twilio.video.VideoTrack;
 import com.twilio.video.VideoView;
 // import org.apache.cordova.twiliovideo.BuildConfig;
 // import org.apache.cordova.twiliovideo.R;
-import org.apache.cordova.twiliovideo.Dialog;
-import org.apache.cordova.twiliovideo.SettingsActivity;
+//import org.apache.cordova.twiliovideo.Dialog;
+// import org.apache.cordova.twiliovideo.
 import org.apache.cordova.twiliovideo.CameraCapturerCompat;
 
 import java.util.Collections;
-import java.util.UUID;
-
 
 public class TwilioVideoActivity extends AppCompatActivity {
+    /* Settings */
+    public static final String PREF_AUDIO_CODEC = "audio_codec";
+    public static final String PREF_AUDIO_CODEC_DEFAULT = "OPUS";
+    public static final String PREF_VIDEO_CODEC = "video_codec";
+    public static final String PREF_VIDEO_CODEC_DEFAULT = "VP8";
+    public static final String PREF_SENDER_MAX_AUDIO_BITRATE = "sender_max_audio_bitrate";
+    public static final String PREF_SENDER_MAX_AUDIO_BITRATE_DEFAULT = "0";
+    public static final String PREF_SENDER_MAX_VIDEO_BITRATE = "sender_max_video_bitrate";
+    public static final String PREF_SENDER_MAX_VIDEO_BITRATE_DEFAULT = "0";
+
     private static final int CAMERA_MIC_PERMISSION_REQUEST_CODE = 1;
     private static final String TAG = "TwilioVideoActivity";
 
@@ -128,7 +136,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
      * Android application UI elements
      */
     private TextView videoStatusTextView;
-    private TextView identityTextView;
+//    private TextView identityTextView;
     private CameraCapturerCompat cameraCapturerCompat;
     private LocalAudioTrack localAudioTrack;
     private LocalVideoTrack localVideoTrack;
@@ -142,6 +150,8 @@ public class TwilioVideoActivity extends AppCompatActivity {
     private AudioManager audioManager;
     private String remoteParticipantIdentity;
 
+    private RemoteParticipant remoteParticipant;
+
     private int previousAudioMode;
     private boolean previousMicrophoneMute;
     private VideoRenderer localVideoView;
@@ -152,7 +162,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getResources().getIdentifier("activity_video", "layout", getPackageName()));
 
-        identityTextView = findViewById(getResources().getIdentifier("identity_textview", "id", getPackageName()));
+//      identityTextView = findViewById(getResources().getIdentifier("identity_textview", "id", getPackageName()));
         primaryVideoView = findViewById(getResources().getIdentifier("primary_video_view", "id", getPackageName()));
         thumbnailVideoView = findViewById(getResources().getIdentifier("thumbnail_video_view", "id", getPackageName()));
         videoStatusTextView = findViewById(getResources().getIdentifier("video_status_textview", "id", getPackageName()));
@@ -203,35 +213,6 @@ public class TwilioVideoActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(getResources().getIdentifier("menu_video_activity", "menu", getPackageName()), menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // menu_settings = getResources().getIdentifier("menu_settings", "id", getPackageName());
-        // speaker_menu_item = getResources().getIdentifier("speaker_menu_item", "id", getPackageName());
-        switch (item.getItemId()) {
-            case R.id.menu_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
-             case R.id.speaker_menu_item:
-                if (audioManager.isSpeakerphoneOn()) {
-                    audioManager.setSpeakerphoneOn(false);
-                    item.setIcon(getResources().getIdentifier("ic_phonelink_ring_white_24dp", "drawable", getPackageName()));
-                } else {
-                    audioManager.setSpeakerphoneOn(true);
-                    item.setIcon(getResources().getIdentifier("ic_volume_up_white_24dp", "drawable", getPackageName()));
-                }
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -260,11 +241,11 @@ public class TwilioVideoActivity extends AppCompatActivity {
         /*
          * Update preferred audio and video codec in case changed in settings
          */
-        audioCodec = getCodecPreference(SettingsActivity.PREF_AUDIO_CODEC,
-                SettingsActivity.PREF_AUDIO_CODEC_DEFAULT,
+        audioCodec = getCodecPreference(PREF_AUDIO_CODEC,
+                PREF_AUDIO_CODEC_DEFAULT,
                 AudioCodec.class);
-        videoCodec = getCodecPreference(SettingsActivity.PREF_VIDEO_CODEC,
-                SettingsActivity.PREF_VIDEO_CODEC_DEFAULT,
+        videoCodec = getCodecPreference(PREF_VIDEO_CODEC,
+                PREF_VIDEO_CODEC_DEFAULT,
                 VideoCodec.class);
 
         /*
@@ -439,6 +420,10 @@ public class TwilioVideoActivity extends AppCompatActivity {
         // setDisconnectAction();
     }
 
+    private boolean localIsPrimary() {
+        return localVideoView == primaryVideoView;
+    }
+
     /*
      * Disconnect from room
      */
@@ -470,6 +455,9 @@ public class TwilioVideoActivity extends AppCompatActivity {
 
         speakerActionFab.show();
         speakerActionFab.setOnClickListener(speakerClickListener());
+
+        thumbnailVideoView.setVisibility(View.VISIBLE);
+        thumbnailVideoView.setOnClickListener(thumbnailVideoViewClickListener());
     }
 
     /*
@@ -485,11 +473,11 @@ public class TwilioVideoActivity extends AppCompatActivity {
 
     private EncodingParameters getEncodingParameters() {
         final int maxAudioBitrate = Integer.parseInt(
-                preferences.getString(SettingsActivity.PREF_SENDER_MAX_AUDIO_BITRATE,
-                        SettingsActivity.PREF_SENDER_MAX_AUDIO_BITRATE_DEFAULT));
+                preferences.getString(PREF_SENDER_MAX_AUDIO_BITRATE,
+                        PREF_SENDER_MAX_AUDIO_BITRATE_DEFAULT));
         final int maxVideoBitrate = Integer.parseInt(
-                preferences.getString(SettingsActivity.PREF_SENDER_MAX_VIDEO_BITRATE,
-                        SettingsActivity.PREF_SENDER_MAX_VIDEO_BITRATE_DEFAULT));
+                preferences.getString(PREF_SENDER_MAX_VIDEO_BITRATE,
+                        PREF_SENDER_MAX_VIDEO_BITRATE_DEFAULT));
 
         return new EncodingParameters(maxAudioBitrate, maxVideoBitrate);
     }
@@ -499,7 +487,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
      */
     private void setDisconnectAction() {
         connectActionFab.setImageDrawable(ContextCompat.getDrawable(this,
-                getResources().getIdentifier("ic_call_end_white_24px", "drawable", getPackageName())));
+                getResources().getIdentifier("ic", "drawable", getPackageName())));
         connectActionFab.show();
         connectActionFab.setOnClickListener(disconnectClickListener());
     }
@@ -520,7 +508,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
     /*
      * Called when remote participant joins the room
      */
-    private void addRemoteParticipant(RemoteParticipant remoteParticipant) {
+    private void addRemoteParticipant(RemoteParticipant remote) {
         /*
          * This app only displays video for one additional participant per Room
          */
@@ -531,16 +519,16 @@ public class TwilioVideoActivity extends AppCompatActivity {
                     .setAction("Action", null).show();
             return;
         }
-        remoteParticipantIdentity = remoteParticipant.getIdentity();
+        remoteParticipantIdentity = remote.getIdentity();
         Log.d(TAG, String.format("RemoteParticipant %s left.", remoteParticipantIdentity));
         videoStatusTextView.setText(remoteParticipantIdentity);
 
         /*
          * Add remote participant renderer
          */
-        if (remoteParticipant.getRemoteVideoTracks().size() > 0) {
+        if (remote.getRemoteVideoTracks().size() > 0) {
             RemoteVideoTrackPublication remoteVideoTrackPublication =
-                    remoteParticipant.getRemoteVideoTracks().get(0);
+                    remote.getRemoteVideoTracks().get(0);
 
             /*
              * Only render video tracks that are subscribed to
@@ -553,7 +541,10 @@ public class TwilioVideoActivity extends AppCompatActivity {
         /*
          * Start listening for participant events
          */
-        remoteParticipant.setListener(remoteParticipantListener());
+        remote.setListener(remoteParticipantListener());
+
+        remoteParticipant = remote;
+
     }
 
     /*
@@ -565,14 +556,70 @@ public class TwilioVideoActivity extends AppCompatActivity {
         videoTrack.addRenderer(primaryVideoView);
     }
 
+    private RemoteVideoTrack getRemoteVideoTrack() {
+        if (remoteParticipant != null && remoteParticipant.getRemoteVideoTracks().size() > 0) {
+            RemoteVideoTrackPublication remoteVideoTrackPublication =
+                    remoteParticipant.getRemoteVideoTracks().get(0);
+
+            /*
+             * Only render video tracks that are subscribed to
+             */
+            if (remoteVideoTrackPublication.isTrackSubscribed()) {
+                return remoteVideoTrackPublication.getRemoteVideoTrack();
+            }
+        }
+        return null;
+    }
+
     private void moveLocalVideoToThumbnailView() {
-        if (thumbnailVideoView.getVisibility() == View.GONE) {
-            thumbnailVideoView.setVisibility(View.VISIBLE);
-            localVideoTrack.removeRenderer(primaryVideoView);
-            localVideoTrack.addRenderer(thumbnailVideoView);
-            localVideoView = thumbnailVideoView;
-            thumbnailVideoView.setMirror(cameraCapturerCompat.getCameraSource() ==
+        moveVideoTrack(localVideoTrack, thumbnailVideoView);
+    }
+
+    private void moveVideoTrack(VideoTrack videoTrack, VideoView viewTo) {
+        if (videoTrack != null) {
+            if (viewTo.getVisibility() == View.GONE) {
+                viewTo.setVisibility(View.VISIBLE);
+            }
+            VideoRenderer rendererFrom = videoTrack.getRenderers().get(0);
+            if (rendererFrom != null) {
+                videoTrack.removeRenderer(rendererFrom);
+            }
+            videoTrack.addRenderer(viewTo);
+        }
+        if (videoTrack instanceof LocalVideoTrack) {
+            localVideoView = viewTo;
+            viewTo.setMirror(cameraCapturerCompat.getCameraSource() ==
                     CameraSource.FRONT_CAMERA);
+        }
+    }
+
+    private void swapVideoTracks() {
+        VideoTrack remoteVideoTrack = getRemoteVideoTrack();
+        if (localIsPrimary()) {
+            moveVideoTrack(localVideoTrack, thumbnailVideoView);
+            moveVideoTrack(remoteVideoTrack, primaryVideoView);
+        } else {
+            moveVideoTrack(localVideoTrack, primaryVideoView);
+            moveVideoTrack(remoteVideoTrack, thumbnailVideoView);
+        }
+    }
+
+    private void moveLocalVideo(VideoView viewTo, VideoView viewFrom) {
+        if (localVideoTrack != null) {
+            localVideoTrack.removeRenderer(viewFrom);
+            localVideoTrack.addRenderer(viewTo);
+            localVideoView = viewTo;
+            viewTo.setMirror(cameraCapturerCompat.getCameraSource() ==
+                    CameraSource.FRONT_CAMERA);
+        }
+    }
+
+    private void moveRemoteVideo(VideoView viewTo, VideoView viewFrom) {
+        VideoTrack remoteVideoTrack = getRemoteVideoTrack();
+        if (remoteVideoTrack != null) {
+            viewTo.setMirror(false);
+            remoteVideoTrack.removeRenderer(viewFrom);
+            remoteVideoTrack.addRenderer(viewTo);
         }
     }
 
@@ -611,14 +658,7 @@ public class TwilioVideoActivity extends AppCompatActivity {
 
     private void moveLocalVideoToPrimaryView() {
         if (thumbnailVideoView.getVisibility() == View.VISIBLE) {
-            thumbnailVideoView.setVisibility(View.GONE);
-            if (localVideoTrack != null) {
-                localVideoTrack.removeRenderer(thumbnailVideoView);
-                localVideoTrack.addRenderer(primaryVideoView);
-            }
-            localVideoView = primaryVideoView;
-            primaryVideoView.setMirror(cameraCapturerCompat.getCameraSource() ==
-                    CameraSource.FRONT_CAMERA);
+           moveVideoTrack(localVideoTrack, primaryVideoView);
         }
     }
 
@@ -1027,12 +1067,23 @@ public class TwilioVideoActivity extends AppCompatActivity {
                 if (cameraCapturerCompat != null) {
                     CameraSource cameraSource = cameraCapturerCompat.getCameraSource();
                     cameraCapturerCompat.switchCamera();
-                    if (thumbnailVideoView.getVisibility() == View.VISIBLE) {
-                        thumbnailVideoView.setMirror(cameraSource == CameraSource.BACK_CAMERA);
+                    if (!localIsPrimary()) {
+                        if (thumbnailVideoView.getVisibility() == View.VISIBLE) {
+                            thumbnailVideoView.setMirror(cameraSource == CameraSource.BACK_CAMERA);
+                        }
                     } else {
                         primaryVideoView.setMirror(cameraSource == CameraSource.BACK_CAMERA);
                     }
                 }
+            }
+        };
+    }
+
+    private View.OnClickListener thumbnailVideoViewClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swapVideoTracks();
             }
         };
     }
@@ -1049,10 +1100,10 @@ public class TwilioVideoActivity extends AppCompatActivity {
                     localVideoTrack.enable(enable);
                     int icon;
                     if (enable) {
-                        icon = getResources().getIdentifier("ic_videocam_white_24dp", "drawable", getPackageName());
+                        icon = getResources().getIdentifier("ic_videoenable_yoobic_black_32px", "drawable", getPackageName());
                         switchCameraActionFab.show();
                     } else {
-                        icon = getResources().getIdentifier("ic_videocam_off_black_24dp", "drawable", getPackageName());
+                        icon = getResources().getIdentifier("ic_videodisable_yoobic_black_32px", "drawable", getPackageName());
                         switchCameraActionFab.hide();
                     }
                     localVideoActionFab.setImageDrawable(
@@ -1074,8 +1125,9 @@ public class TwilioVideoActivity extends AppCompatActivity {
                 if (localAudioTrack != null) {
                     boolean enable = !localAudioTrack.isEnabled();
                     localAudioTrack.enable(enable);
-                    int icon = enable ?
-                            getResources().getIdentifier("ic_mic_white_24dp", "drawable", getPackageName()) : getResources().getIdentifier("ic_mic_off_black_24dp", "drawable", getPackageName());
+                    int icon = enable
+                            ? getResources().getIdentifier("ic_mute_yoobic_black_32px", "drawable", getPackageName())
+                            : getResources().getIdentifier("ic_unmute_yoobic_black_32px", "drawable", getPackageName());
                     muteActionFab.setImageDrawable(ContextCompat.getDrawable(
                             TwilioVideoActivity.this, icon));
                 }
@@ -1090,11 +1142,11 @@ public class TwilioVideoActivity extends AppCompatActivity {
                 if (audioManager.isSpeakerphoneOn()) {
                     audioManager.setSpeakerphoneOn(false);
                     speakerActionFab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),
-                            getResources().getIdentifier("ic_phonelink_ring_white_24dp", "drawable", getPackageName())));
+                            getResources().getIdentifier("ic_mutespeaker_yoobic_black_32px", "drawable", getPackageName())));
                 } else {
                     audioManager.setSpeakerphoneOn(true);
                     speakerActionFab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),
-                            getResources().getIdentifier("ic_volume_up_white_24dp", "drawable", getPackageName())));
+                            getResources().getIdentifier("ic_speaker_yoobic_black_32px", "drawable", getPackageName())));
                 }
             }
         };

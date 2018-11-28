@@ -17,7 +17,7 @@
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_margin="16dp"
-        android:layout_gravity="bottom|start"/>
+        android:layout_gravity="top|end"/>
 
     <com.twilio.video.VideoView
         android:id="@+id/primary_video_view"
@@ -30,6 +30,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:visibility="gone"
         android:layout_gravity="bottom">
 
         <TextView
